@@ -16,8 +16,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function local_vxg_menus_get_all_childrenkeys(navigation_node $navigationnode)
-{
+function local_vxg_menus_get_all_childrenkeys(navigation_node $navigationnode) {
     // Empty array to hold all children.
     $allchildren = array();
 
@@ -41,94 +40,90 @@ function local_vxg_menus_get_all_childrenkeys(navigation_node $navigationnode)
     }
 }
 
-function local_vxg_menus_get_assignable_roles()
-{
+function local_vxg_menus_get_assignable_roles() {
     global $DB;
 
-    $role_ids = $DB->get_fieldset_select('role_context_levels', 'roleid',
+    $roleids = $DB->get_fieldset_select('role_context_levels', 'roleid',
         'contextlevel = ? OR contextlevel = ? OR contextlevel = ?', array('10', '40', '50'));
 
-    $insql = 'IN (' . implode(',', $role_ids) . ')';
+    $insql = 'IN (' . implode(',', $roleids) . ')';
 
     $sql = 'SELECT shortname FROM {role} WHERE id ' . $insql . ' ORDER BY id';
 
-    $role_names = $DB->get_fieldset_sql($sql);
+    $rolenames = $DB->get_fieldset_sql($sql);
 
-    $role_names = array_combine(array_values($role_names), array_values($role_names));
+    $rolenames = array_combine(array_values($rolenames), array_values($rolenames));
 
-    return $role_names;
+    return $rolenames;
 
 }
 
-function local_vxg_menus_get_user_role_names()
-{
+function local_vxg_menus_get_user_role_names() {
     global $USER, $COURSE;
 
-    $user_roles = get_user_roles(context_course::instance($COURSE->id), $USER->id);
+    $userroles = get_user_roles(context_course::instance($COURSE->id), $USER->id);
 
-    $role_names = array();
-    foreach ($user_roles as $role) {
-        $role_names[] = $role->shortname;
+    $rolenames = array();
+    foreach ($userroles as $role) {
+        $rolenames[] = $role->shortname;
     }
 
-    return $role_names;
+    return $rolenames;
 
 }
 
-function local_vxg_menus_get_user_role_ids()
-{
+function local_vxg_menus_get_user_role_ids() {
     global $USER, $COURSE;
 
-    $user_roles = get_user_roles(context_course::instance($COURSE->id), $USER->id);
+    $userroles = get_user_roles(context_course::instance($COURSE->id), $USER->id);
 
-    $role_ids = array();
-    foreach ($user_roles as $role) {
-        $role_ids[] = $role->roleid;
+    $roleids = array();
+    foreach ($userroles as $role) {
+        $roleids[] = $role->roleid;
     }
 
-    return $role_ids;
+    return $roleids;
 
 }
 
-function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav)
-{
+function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav) {
     global $DB, $PAGE, $COURSE, $CFG;
 
+    $userroles = local_vxg_menus_get_user_role_ids();
 
-    $user_roles = local_vxg_menus_get_user_role_ids();
+    $nodesdata = $DB->get_records('local_vxg_menus');
 
-    $nodes_data = $DB->get_records('vxg_menu');
-
-    foreach ($nodes_data as $node_data) {
+    foreach ($nodesdata as $nodedata) {
         if ($nav) {
 
-            // if disabled not show
-            if ($node_data->disabled) {
+            // If disabled not show.
+            if ($nodedata->disabled) {
                 continue;
             }
 
-            // check is user has a role for this menu
-            $user_hasrole = false;
-            if ($node_roles = $DB->get_records('vxg_right', array('objecttype' => 'menu', 'objectid' => $node_data->id))) {
-                foreach ($node_roles as $node_role) {
-                    if (in_array($node_role->roleid, $user_roles)) {
-                        $user_hasrole = true;
+            // Check is user has a role for this menu.
+            $userhasrole = false;
+            if ($noderoles = $DB->get_records('local_vxg_menus_right',
+                array('objecttype' => 'menu', 'objectid' => $nodedata->id))) {
+                foreach ($noderoles as $noderole) {
+                    if (in_array($noderole->roleid, $userroles)) {
+                        $userhasrole = true;
                         continue;
                     }
                 }
             } else {
-                $user_hasrole = true;
+                $userhasrole = true;
             }
 
-            $iconarr = explode('/', $node_data->icon,2);
-            // Create node
-            if ($user_hasrole || is_siteadmin()) {
-                $id    = $node_data->id;
-                $name  = $node_data->name;
-                $url   = new moodle_url('/' . $node_data->url);
-                $order = $node_data->menu_order;
+            $iconarr = explode('/', $nodedata->icon, 2);
+            // Create node.
+            if ($userhasrole || is_siteadmin()) {
+                $id    = $nodedata->id;
+                $name  = $nodedata->name;
+                $url   = new moodle_url('/' . $nodedata->url);
+                $order = $nodedata->menu_order;
 
-                if (isset($node_data->icon) && !empty($node_data->icon)) {
+                if (isset($nodedata->icon) && !empty($nodedata->icon)) {
                     $icon = new pix_icon($iconarr[1], $name, $iconarr[0]);
                 } else {
                     $icon = new pix_icon('t/edit_menu', $name);
@@ -143,7 +138,7 @@ function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav)
                     $icon
                 );
 
-                // Make visible in flatnav
+                // Make visible in flatnav.
                 $newnode->showinflatnavigation = true;
 
                 if ($PAGE->url->compare($url, URL_MATCH_BASE)) {
@@ -151,10 +146,9 @@ function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav)
                 }
 
                 if ($order == 1) {
-                    // get the first node to add before that 
-                    $first_node = $nav->get_children_key_list()[0];
-                    $nav->add_node($newnode, $first_node);
-                    // $nav->add_node($newnode);
+                    // Get the first node to add before that.
+                    $firstnode = $nav->get_children_key_list()[0];
+                    $nav->add_node($newnode, $firstnode);
                 } else {
                     $nav->add_node($newnode);
                 }
@@ -164,22 +158,14 @@ function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav)
     }
 }
 
-function local_vxg_menus_get_role_id($shortname)
-{
+function local_vxg_menus_get_role_id($shortname) {
     global $DB;
-
     $role = $DB->get_record('role', array('shortname' => $shortname));
-
     return $role->id;
-
 }
 
-function local_vxg_menus_get_role_shortname($id)
-{
+function local_vxg_menus_get_role_shortname($id) {
     global $DB;
-
     $role = $DB->get_record('role', array('id' => $id));
-
     return $role->shortname;
-
 }

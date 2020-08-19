@@ -30,9 +30,10 @@ $table = new table_sql('local_vxg_menus_table');
 echo $OUTPUT->header();
 
 $addurl = new moodle_url('/local/vxg_menus/addnavigationitem.php');
-echo html_writer::link($addurl, html_writer::tag('button', get_string('add_new', 'local_vxg_menus'), array('class' => 'btn btn-primary')));
+echo html_writer::link($addurl, html_writer::tag('button',
+get_string('add_new', 'local_vxg_menus'), array('class' => 'btn btn-primary')));
 
-$table_headers = array(
+$tableheaders = array(
         '',
         get_string('name', 'local_vxg_menus'),
         get_string('lang', 'local_vxg_menus'),
@@ -40,31 +41,31 @@ $table_headers = array(
     );
 
 
-$table->define_headers($table_headers);
+$table->define_headers($tableheaders);
 
 $url = new moodle_url('local/vxg_menus/all_menu.php');
-$table->define_columns(array( '', 'name', 'lang', 'url',));
+$table->define_columns(array( '', 'name', 'lang', 'url'));
 $table->define_baseurl($url);
 $table->sortable(false);
 $table->collapsible(false);
 $table->setup();
 $class = '';
 
-$menus = $DB->get_records('vxg_menu');
+$menus = $DB->get_records('local_vxg_menus');
 
 foreach ($menus as $menu) {
-
-	$row = array();
-	$class = '';
-    // Edit
-    $edit_url = new moodle_url('/local/vxg_menus/addnavigationitem.php', array('menuid' => $menu->id));
-    // Delete
-    $delete_url = new moodle_url('/local/vxg_menus/delete_menu.php', array('menuid' => $menu->id));
+    $row = array();
+    $class = '';
+    // Edit.
+    $editurl = new moodle_url('/local/vxg_menus/addnavigationitem.php', array('menuid' => $menu->id));
+    // Delete.
+    $deleteurl = new moodle_url('/local/vxg_menus/delete_menu.php', array('menuid' => $menu->id));
     $deletepicurl = new moodle_url('/pix/t/delete.svg');
-    $delete_link = html_writer::link($delete_url, $OUTPUT->pix_icon('t/delete', get_string('delete', 'local_vxg_menus')));
-    
-    $row[] = $delete_link;
-    $row[] = html_writer::link($edit_url, $menu->name);
+    $deletelink = html_writer::link($deleteurl,
+    $OUTPUT->pix_icon('t/delete', get_string('delete', 'local_vxg_menus')));
+
+    $row[] = $deletelink;
+    $row[] = html_writer::link($editurl, $menu->name);
     $row[] = $menu->lang;
     $row[] = $menu->url;
 

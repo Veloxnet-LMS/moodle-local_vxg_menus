@@ -14,9 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-require_once '../../config.php';
-require_once $CFG->libdir . '/adminlib.php';
-require_once 'forms.php';
+require_once('../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 global $DB;
 
@@ -28,7 +27,7 @@ $heading = get_string('delete', 'local_vxg_menus');
 $PAGE->set_title($heading);
 $PAGE->set_heading($heading);
 
-$mform            = new local_delete_nav_item_form();
+$mform            = new \local_vxg_menus\form\add_nav_item_form();
 $toform['menuid'] = $menuid;
 $mform->set_data($toform);
 
@@ -38,8 +37,8 @@ if ($mform->is_cancelled()) {
     redirect($redirecturl);
 } else if ($data = $mform->get_data()) {
 
-    $DB->delete_records('vxg_menu', array('id' => $menuid));
-    $DB->delete_records('vxg_right', array('objecttype' => 'menu', 'objectid' => $menuid));
+    $DB->delete_records('local_vxg_menus', array('id' => $menuid));
+    $DB->delete_records('local_vxg_menus_right', array('objecttype' => 'menu', 'objectid' => $menuid));
 
     redirect($redirecturl);
 }

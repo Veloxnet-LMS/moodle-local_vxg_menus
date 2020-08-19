@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="vxg_menu" COMMENT="Custom menu items">
+    <TABLE NAME="local_vxg_menus" COMMENT="Custom menu items">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="parentid" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false"/>
@@ -18,6 +18,22 @@
         <FIELD NAME="target" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="menu_order" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="disabled" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+        <TABLE NAME="local_vxg_menus_right" COMMENT="vxg_menus_right table">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="objecttype" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="objectid" TYPE="int" LENGTH="18" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="roleid" TYPE="int" LENGTH="18" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="18" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="children" TYPE="int" LENGTH="9" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="righttype" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="datetime" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="18" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

@@ -1,4 +1,4 @@
-{{!
+<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -13,12 +13,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-}}
-{{!
-    @template local_vxg_menus/icon_picker_modal
 
-    Context variables required for this template:
-      None
-}}
+namespace local_vxg_menus\privacy;
 
-{{{icons}}}
+class provider implements
+    // This plugin does not store any personal user data.
+    \core_privacy\local\metadata\null_provider {
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}

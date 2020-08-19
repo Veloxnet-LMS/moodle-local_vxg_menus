@@ -17,8 +17,9 @@
 defined('MOODLE_INTERNAL') || die;
 
 $string['pluginname'] = 'Vxg Menus';
+$string['privacy:metadata'] = 'The Menus plugin does not store any personal data.';
 
-// Remove nodes
+// Remove nodes.
 $string['setting_removemyhomenode']            = 'Home page';
 $string['setting_removemyhomenode_desc']       = 'Hide Dashboard or Site home from the side navigation depending on what the user chose to be his home page.';
 $string['setting_removehomenode']              = 'Site Home';
@@ -42,19 +43,19 @@ $string['setting_removegradesnode_desc']       = 'Hide Grades from the navigatio
 
 $string['hide_for_roles'] = 'With role';
 
-//Headings
+// Headings.
 $string['hide_side_menu_head'] = 'Hideing menu items form the side navigation from specified roles. If no role checked it will be hide form all users except Admin.
 But there is an option to hide from Admin too.';
 $string['hide_course_side_menu_head'] = 'Hideing menu items form the navigation wich are only visible in course pages';
 
-// Menus
+// Menus.
 $string['hide_menus']                 = 'Hide navigation items';
 $string['setting_hide_to_admin']      = 'Hide to admin';
 $string['setting_hide_to_admin_desc'] = '<br><br><br>';
 $string['side_menus']                 = 'Side menu';
 $string['custom_menu_items']          = 'Custom menu items';
 
-// Custome nodes
+// Custome nodes.
 $string['all_menu']  = 'All Menu item';
 $string['name']      = 'Name';
 $string['name_help'] = 'The name that shown in the menu';
@@ -74,6 +75,6 @@ $string['front']          = 'After dashboard';
 $string['back']           = 'After last menu';
 $string['order']          = 'After';
 
-// icon-selection
+// Icon-selection.
 $string['select-icon'] = 'Choose Icon';
 $string['iconselection'] = 'Icon selection';

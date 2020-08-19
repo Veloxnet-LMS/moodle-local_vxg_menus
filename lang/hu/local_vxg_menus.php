@@ -17,10 +17,11 @@
 defined('MOODLE_INTERNAL') || die;
 
 $string['pluginname'] = 'Vxg Menük';
+$string['privacy:metadata'] = 'A Menük plugin nem tárol személyes adatokat.';
 
-// Remove nodes
+// Remove nodes.
 $string['setting_removemyhomenode']            = 'Kezdőoldal';
-                                                     
+                                   
 $string['setting_removemyhomenode_desc']       = 'Irányítópult vagy Portál kezdőoldala elrejtése a menüből attól függően, hogy a felhasználó, mit állított be a kezdőoldalának.';
 $string['setting_removehomenode']              = 'Portál kezdőoldal';
 $string['setting_removehomenode_desc']         = 'Portál kezdőoldal elrejtése';
@@ -43,19 +44,18 @@ $string['setting_removegradesnode_desc']       = 'Pontok elrejtése.';
 
 $string['hide_for_roles'] = 'Szerepkörrel';
 
-//Headings
-$string['hide_side_menu_head'] = 'Menü elemek elrejtése meghatározott szerepkörrel rendelkező felhasználóknak. Ha nincs szerepkör meghatározva, a rendszergazdákon kívűl mindenkinek el lesz rejtve.
-De van lehetőség hogy a rendszergazdáknak is el lehessen rejteni.';
+// Headings.
+$string['hide_side_menu_head'] = 'Menü elemek elrejtése meghatározott szerepkörrel rendelkező felhasználóknak. Ha nincs szerepkör meghatározva, a rendszergazdákon kívűl mindenkinek el lesz rejtve. De van lehetőség hogy a rendszergazdáknak is el lehessen rejteni.';
 $string['hide_course_side_menu_head'] = 'Kurzus menük elrejtése.';
 
-// Menus
+// Menus.
 $string['hide_menus']                 = 'Menük elrejtése';
 $string['setting_hide_to_admin']      = 'Elrejtés rendszergazdának';
 $string['setting_hide_to_admin_desc'] = '<br><br><br>';
 $string['side_menus']                 = 'Oldalsó menü';
 $string['custom_menu_items']          = 'Saját menü elemek';
 
-// Custome nodes
+// Custome nodes.
 $string['all_menu']  = 'Összes saját menü';
 $string['name']      = 'Név';
 $string['name_help'] = 'A felirat, ami megjelenik a menün';
@@ -75,6 +75,6 @@ $string['front']          = 'Írányítópult után';
 $string['back']           = 'Az utolsó menü után';
 $string['order']          = 'After ';
 
-// icon-selection
+// Icon-selection.
 $string['select-icon'] = 'Ikon választása';
 $string['iconselection'] = 'Ikon választó';

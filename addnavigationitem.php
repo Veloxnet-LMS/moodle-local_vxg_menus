@@ -14,9 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-require_once '../../config.php';
-require_once $CFG->libdir . '/adminlib.php';
-require_once 'forms.php';
+require_once('../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 global $DB;
 
@@ -35,19 +34,19 @@ $PAGE->set_heading($heading);
 $PAGE->requires->js_call_amd('local_vxg_menus/icon_picker', 'init');
 $PAGE->requires->css('/local/vxg_menus/styles.css');
 
-$selected_roles = $DB->get_records('vxg_right', array('objecttype' => 'menu', 'objectid' => $menuid), '', 'roleid');
+$selectedroles = $DB->get_records('local_vxg_menus_right', array('objecttype' => 'menu', 'objectid' => $menuid), '', 'roleid');
 
-$selected_roles_array = array();
-foreach ($selected_roles as $selected_role) {
-    $selected_roles_array[] = local_vxg_menus_get_role_shortname($selected_role->roleid);
+$selectedrolesarray = array();
+foreach ($selectedroles as $selectedrole) {
+    $selectedrolesarray[] = local_vxg_menus_get_role_shortname($selectedrole->roleid);
 }
 
 if ($menuid != 0) {
-    $menu = $DB->get_record('vxg_menu', array('id' => $menuid));
+    $menu = $DB->get_record('local_vxg_menus', array('id' => $menuid));
 }
 
 if (isset($menu) && !empty($menu->icon)) {
-    $iconarr = explode('/', $menu->icon,2);
+    $iconarr = explode('/', $menu->icon, 2);
     $iconname = $iconarr[1];
     $iconcomp = $iconarr[0];
 } else {
@@ -55,7 +54,9 @@ if (isset($menu) && !empty($menu->icon)) {
     $iconcomp = 'core';
 }
 
-$mform            = new local_add_nav_item_form(null, array('selected_roles' => $selected_roles_array, 'iconname' => $iconname, 'iconcomp' => $iconcomp));
+$mform = new \local_vxg_menus\form\add_nav_item_form(null,
+    array('selectedroles' => $selectedrolesarray, 'iconname' => $iconname, 'iconcomp' => $iconcomp));
+
 $toform['menuid'] = $menuid;
 $mform->set_data($toform);
 
@@ -75,7 +76,7 @@ if ($mform->is_cancelled()) {
         $node->icon       = $data->icon;
         $node->menu_order = $data->menu_order;
 
-        $newid = $DB->insert_record('vxg_menu', $node);
+        $newid = $DB->insert_record('local_vxg_menus', $node);
 
         if (isset($data->roles) && !empty($data->roles)) {
 
@@ -87,7 +88,7 @@ if ($mform->is_cancelled()) {
                 $roles->roleid     = $roleid;
                 $roles->objectid   = $newid;
 
-                $DB->insert_record('vxg_right', $roles);
+                $DB->insert_record('local_vxg_menus_right', $roles);
 
             }
         }
@@ -103,8 +104,8 @@ if ($mform->is_cancelled()) {
         $node->icon       = $data->icon;
         $node->menu_order = $data->menu_order;
 
-        $DB->update_record('vxg_menu', $node);
-        $DB->delete_records('vxg_right', array('objecttype' => 'menu', 'objectid' => $menuid));
+        $DB->update_record('local_vxg_menus', $node);
+        $DB->delete_records('local_vxg_menus_right', array('objecttype' => 'menu', 'objectid' => $menuid));
 
         if (isset($data->roles) && !empty($data->roles)) {
 
@@ -116,7 +117,7 @@ if ($mform->is_cancelled()) {
                 $roles->roleid     = $roleid;
                 $roles->objectid   = $node->id;
 
-                $DB->insert_record('vxg_right', $roles);
+                $DB->insert_record('local_vxg_menus_right', $roles);
 
             }
         }
