@@ -13,79 +13,86 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Page for adding new organisation
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define([
-  "jquery",
-  "core/modal_factory",
-  "core/str",
-  "core/modal_events",
-  "core/templates",
-  "core/ajax"
+    "jquery",
+    "core/modal_factory",
+    "core/str",
+    "core/modal_events",
+    "core/templates",
+    "core/ajax"
 ], function (
-  $,
-  ModalFactory,
-  Str,
-  ModalEvents,
-  Templates,
-  Ajax
+    $,
+    ModalFactory,
+    Str,
+    ModalEvents,
+    Templates,
+    Ajax
 ) {
-  return {
-    init: function () {
-      var icon_pickerlink = $("[data-key=icon_picker]");
-      var title = Str.get_string("iconselection", "local_vxg_menus");
+    return {
+        init: function () {
+            var icon_pickerlink = $("[data-key=icon_picker]");
+            var title = Str.get_string("iconselection", "local_vxg_menus");
 
+            var fetchMap = Ajax.call([
+                {
+                    methodname: "core_output_load_fontawesome_icon_map",
+                    args: [],
+                },
+            ], true, false)[0];
 
-      fetchMap = Ajax.call([
-        {
-          methodname: "core_output_load_fontawesome_icon_map",
-          args: [],
-        },
-      ], true, false)[0];
+            fetchMap.then(function (map) {
+                var iconArray = [];
+                var toarray = [];
+                map.forEach(function (value) {
+                    if (toarray.indexOf(value.to) === -1) {
+                        Templates.renderPix(
+                            value.pix,
+                            value.component,
+                            value.component + "/" + value.pix
+                        ).then(function (result) {
+                            iconArray.push(result);
+                        });
+                    }
+                    toarray.push(value.to);
+                });
 
-      fetchMap.then(function (map) {
-        var iconArray = [];
-        var toarray = [];
-        map.forEach(function (value) {
-          if (toarray.indexOf(value.to) === -1) {
-            Templates.renderPix(
-              value.pix,
-              value.component,
-              value.component + "/" + value.pix
-            ).then(function (result) {
-              iconArray.push(result);
+                ModalFactory.create(
+                    {
+                        title: title,
+                        body: Templates.render('local_vxg_menus/icon_picker_modal', { 'icons': iconArray }),
+                        type: "SAVE_CANCEL"
+                    },
+                    icon_pickerlink
+                ).then(function (modal) {
+                    modal.setLarge();
+                    modal.attachToDOM();
+                    var modalBody = $(".modal-body");
+                    var icons = modalBody.find('.icon');
+                    icons.on("click", function () {
+                        $(".choosed-icon").removeClass("choosed-icon");
+                        $(this).addClass("choosed-icon");
+
+                    });
+
+                    modal.getRoot().on(ModalEvents.save, function () {
+                        var selectedname = $(".choosed-icon").attr("title");
+                        var clone = $(".choosed-icon").clone();
+                        $(".selected_icon").replaceWith(clone);
+                        clone.addClass('selected_icon');
+                        clone.removeClass('choosed-icon');
+
+                        $('[name="icon"]').val(selectedname);
+                    });
+                });
             });
-          }
-          toarray.push(value.to);
-        });
-
-        ModalFactory.create(
-          {
-            title: title,
-            body: Templates.render('local_vxg_menus/icon_picker_modal', { 'icons': iconArray }),
-            type: "SAVE_CANCEL"
-          },
-          icon_pickerlink
-        ).then(function (modal) {
-          modal.setLarge();
-          modal.attachToDOM();
-          var modalBody = $(".modal-body");
-          var icons = modalBody.find('.icon');
-          icons.on("click", function () {
-            $(".choosed-icon").removeClass("choosed-icon");
-            $(this).addClass("choosed-icon");
-
-          });
-
-          modal.getRoot().on(ModalEvents.save, function (e) {
-            var selectedname = $(".choosed-icon").attr("title");
-            var clone = $(".choosed-icon").clone();
-            $(".selected_icon").replaceWith(clone);
-            clone.addClass('selected_icon');
-            clone.removeClass('choosed-icon');
-
-            $('[name="icon"]').val(selectedname);
-          });
-        });
-      });
-    },
-  };
+        },
+    };
 });

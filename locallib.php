@@ -14,8 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Functions for local_vxg_menus
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Returns the keys of a navhation_node
+ *
+ * @param navigation_node $navigationnode
+ * @return array $allchildren
+ */
 function local_vxg_menus_get_all_childrenkeys(navigation_node $navigationnode) {
     // Empty array to hold all children.
     $allchildren = array();
@@ -40,6 +54,11 @@ function local_vxg_menus_get_all_childrenkeys(navigation_node $navigationnode) {
     }
 }
 
+/**
+ * Returns the roles that can be assigned
+ *
+ * @return array $rolenames
+ */
 function local_vxg_menus_get_assignable_roles() {
     global $DB;
 
@@ -58,6 +77,11 @@ function local_vxg_menus_get_assignable_roles() {
 
 }
 
+/**
+ * Returns the current user's roles name
+ *
+ * @return array $rolenames
+ */
 function local_vxg_menus_get_user_role_names() {
     global $USER, $COURSE;
 
@@ -72,6 +96,11 @@ function local_vxg_menus_get_user_role_names() {
 
 }
 
+/**
+ * Returns the current user's roles
+ *
+ * @return array $roleids
+ */
 function local_vxg_menus_get_user_role_ids() {
     global $USER, $COURSE;
 
@@ -86,8 +115,14 @@ function local_vxg_menus_get_user_role_ids() {
 
 }
 
+/**
+ * Adds navigation nodes to the global_navigation
+ *
+ * @param global_navigation $nav
+ * @return void
+ */
 function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav) {
-    global $DB, $PAGE, $COURSE, $CFG;
+    global $DB, $PAGE, $COURSE;
 
     $userroles = local_vxg_menus_get_user_role_ids();
 
@@ -95,9 +130,8 @@ function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav) {
 
     foreach ($nodesdata as $nodedata) {
         if ($nav) {
-
             // If disabled not show.
-            if ($nodedata->disabled) {
+            if ($nodedata->disabled || (!empty($nodedata->lang) && current_language() != $nodedata->lang)) {
                 continue;
             }
 
@@ -116,11 +150,23 @@ function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav) {
             }
 
             $iconarr = explode('/', $nodedata->icon, 2);
+
+            $courseid = $COURSE->id;
+
+            if (!empty($nodedata->params && $courseid == SITEID)) {
+                continue;
+            }
+
+            $paramarray = array();
+            if (!empty($nodedata->params) && $courseid != SITEID) {
+                $paramarray = array($nodedata->params => $courseid);
+            }
+
             // Create node.
             if ($userhasrole || is_siteadmin()) {
                 $id    = $nodedata->id;
                 $name  = $nodedata->name;
-                $url   = new moodle_url('/' . $nodedata->url);
+                $url   = new moodle_url('/' . $nodedata->url, $paramarray);
                 $order = $nodedata->menu_order;
 
                 if (isset($nodedata->icon) && !empty($nodedata->icon)) {
@@ -158,12 +204,24 @@ function local_vxg_menus_add_new_navigation_nodes(global_navigation $nav) {
     }
 }
 
+/**
+ * Returns the role id from the role name
+ *
+ * @param string $shortname
+ * @return integer $id
+ */
 function local_vxg_menus_get_role_id($shortname) {
     global $DB;
     $role = $DB->get_record('role', array('shortname' => $shortname));
     return $role->id;
 }
 
+/**
+ * Returns the role name from the role id
+ *
+ * @param integer $id
+ * @return integer $shortname
+ */
 function local_vxg_menus_get_role_shortname($id) {
     global $DB;
     $role = $DB->get_record('role', array('id' => $id));

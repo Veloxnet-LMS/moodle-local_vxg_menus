@@ -14,8 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Page for adding new organisation
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_vxg_menus\privacy;
 
+defined('MOODLE_INTERNAL') || die();
+/**
+ * Privacy Subsystem for local_vxg_menus implementing null_provider.
+ *
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class provider implements
     // This plugin does not store any personal user data.
     \core_privacy\local\metadata\null_provider {

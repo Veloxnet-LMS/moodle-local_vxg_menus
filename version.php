@@ -14,8 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Version details
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020082000;
+$plugin->version   = 2021031506;
 $plugin->requires  = 2017111309;
 $plugin->component = 'local_vxg_menus';

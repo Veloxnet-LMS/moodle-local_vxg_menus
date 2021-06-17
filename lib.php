@@ -14,51 +14,48 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * The Vxg menus local plugin helper functions
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/locallib.php');
 require_once($CFG->libdir . '/badgeslib.php');
 
+/**
+ * Extends the module settings navigation
+ *
+ * This function is called when the context for the page is an activity module with the
+ * FEATURE_ADVANCED_GRADING, the user has the permission moodle/grade:managegradingforms
+ * and there is an area with the active grading method set to the given plugin.
+ *
+ * @param settings_navigation $settingsnav
+ * @param context $context
+ */
 function local_vxg_menus_extend_settings_navigation(settings_navigation $settingsnav, context $context) {
     return; // Not used anymore!
 }
 
+/**
+ * Extends the module navigation
+ *
+ * This function is called when the context for the page is an activity module with the
+ * FEATURE_ADVANCED_GRADING and there is an area with the active grading method set to the given plugin.
+ *
+ * @param global_navigation $nav
+ */
 function local_vxg_menus_extend_navigation(global_navigation $nav) {
 
-    global $CFG, $PAGE, $COURSE, $USER;
+    global $CFG, $PAGE, $COURSE;
 
     // Get vxg_menus config and user roles.
-    $config     = get_config('local_vxg_menus');
+    $config    = get_config('local_vxg_menus');
     $rolenames = local_vxg_menus_get_user_role_names();
-
-    // MYHOME.
-
-    // If setting checked hide role.
-    if (isset($config->removemyhomenode) && $config->removemyhomenode == true && !is_siteadmin()) {
-        // Make form roles that are checked.
-        if (isset($config->myhomeroles) && !empty($config->myhomeroles)) {
-            $usermyhomeroles = explode(',', $config->myhomeroles);
-        }
-        // If any role checked hide only for that role.
-        if (isset($usermyhomeroles) && !empty($usermyhomeroles) && !empty($rolenames)) {
-            foreach ($rolenames as $role) {
-                if (in_array($role, $usermyhomeroles)) {
-                    $nav->showinflatnavigation = false;
-                } else {
-                    $nav->showinflatnavigation = true;
-                    // If user has one role that are not in the cecked roles show menu.
-                    break;
-                }
-            }
-        } else {
-            // If no role checked hide to everyone.
-            $nav->showinflatnavigation = false;
-        }
-    }
-    // Hide to admin.
-    if (isset($config->removemyhomenodeadmin) && $config->removemyhomenodeadmin == true && is_siteadmin()) {
-        $nav->showinflatnavigation = false;
-    }
 
     // HOME.
 

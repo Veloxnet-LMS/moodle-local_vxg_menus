@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Settings for the vxg_menus local plugin
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once(__DIR__ . '/locallib.php');
@@ -34,20 +42,6 @@ $addsettings = new admin_externalpage('local_vxg_all_menu',
 // Hide menus items settings.
 $hidesettings->add(new admin_setting_heading('local_vxg_hide_menus', '',
     get_string('hide_side_menu_head', 'local_vxg_menus')));
-
-// Myhome.
-$hidesettings->add(new admin_setting_configcheckbox('local_vxg_menus/removemyhomenode',
-    get_string('setting_removemyhomenode', 'local_vxg_menus'),
-    '', 0));
-
-$hidesettings->add(new admin_setting_configmulticheckbox('local_vxg_menus/myhomeroles',
-    get_string('hide_for_roles', 'local_vxg_menus'),
-    get_string('setting_removemyhomenode_desc', 'local_vxg_menus'), null, $roles));
-
-// Hite to admin.
-$hidesettings->add(new admin_setting_configcheckbox('local_vxg_menus/removemyhomenodeadmin',
-    get_string('setting_hide_to_admin', 'local_vxg_menus'),
-    get_string('setting_hide_to_admin_desc', 'local_vxg_menus'), 0));
 
 // Home.
 $hidesettings->add(new admin_setting_configcheckbox('local_vxg_menus/removehomenode',
@@ -97,8 +91,8 @@ $hidesettings->add(new admin_setting_configmulticheckbox('local_vxg_menus/mycour
 
 // Hite to admin.
 $hidesettings->add(new admin_setting_configcheckbox('local_vxg_menus/removemycoursesnodeadmin',
-get_string('setting_hide_to_admin', 'local_vxg_menus'),
-get_string('setting_hide_to_admin_desc', 'local_vxg_menus'), 0));
+    get_string('setting_hide_to_admin', 'local_vxg_menus'),
+    get_string('setting_hide_to_admin_desc', 'local_vxg_menus'), 0));
 
 // Course nodes head.
 $hidesettings->add(new admin_setting_heading('local_vxg_hide_course_menus', '',
@@ -115,8 +109,8 @@ $hidesettings->add(new admin_setting_configmulticheckbox('local_vxg_menus/partic
 
 // Hite to admin.
 $hidesettings->add(new admin_setting_configcheckbox('local_vxg_menus/removeparticipantsnodeadmin',
-get_string('setting_hide_to_admin', 'local_vxg_menus'),
-get_string('setting_hide_to_admin_desc', 'local_vxg_menus'), 0));
+    get_string('setting_hide_to_admin', 'local_vxg_menus'),
+    get_string('setting_hide_to_admin_desc', 'local_vxg_menus'), 0));
 
 // Badges.
 
@@ -156,8 +150,8 @@ $hidesettings->add(new admin_setting_configmulticheckbox('local_vxg_menus/grades
 
 // Hite to admin.
 $hidesettings->add(new admin_setting_configcheckbox('local_vxg_menus/removegradesnodeadmin',
-get_string('setting_hide_to_admin', 'local_vxg_menus'),
-get_string('setting_hide_to_admin_desc', 'local_vxg_menus'), 0));
+    get_string('setting_hide_to_admin', 'local_vxg_menus'),
+    get_string('setting_hide_to_admin_desc', 'local_vxg_menus'), 0));
 
 $ADMIN->add('local_vxg_menus', $hidesettings);
 $ADMIN->add('local_vxg_menus', $addsettings);

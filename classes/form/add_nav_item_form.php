@@ -14,18 +14,40 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Adding new organisation form.
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_vxg_menus\form;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
+/**
+ * Adding new organisation form.
+ *
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class add_nav_item_form extends \moodleform {
 
+    /**
+     * Form definition.
+     */
     public function definition() {
-        global $CFG, $OUTPUT;
+        global $OUTPUT;
 
         $mform = $this->_form;
+
+        $languages = array('' => \get_string('all'));
+        $languages += get_string_manager()->get_list_of_translations();
 
         $roles          = local_vxg_menus_get_assignable_roles();
         $size           = count($roles);
@@ -39,13 +61,23 @@ class add_nav_item_form extends \moodleform {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->setType('name', PARAM_TEXT);
 
-        $mform->addElement('text', 'lang', \get_string('lang', 'local_vxg_menus'), $styles);
-        $mform->setType('lang', PARAM_TEXT);
+        $mform->addElement('select', 'lang', \get_string('lang', 'local_vxg_menus'), $languages, $styles);
+        $mform->setType('lang', PARAM_LANG);
+        $mform->addHelpButton('lang', 'lang', 'local_vxg_menus');
 
         $mform->addElement('text', 'url', 'url', $styles);
         $mform->addHelpButton('url', 'url', 'local_vxg_menus');
         $mform->addRule('url', null, 'required', null, 'client');
-        $mform->setType('url', PARAM_TEXT);
+        $mform->setType('url', PARAM_LOCALURL);
+
+        $radioarray = array();
+        $radioarray[] = $mform->createElement('radio', 'urlparam', '', get_string('noparam', 'local_vxg_menus'), 0, array());
+        $radioarray[] = $mform->createElement('radio', 'urlparam', '', 'id', 1, array());
+        $radioarray[] = $mform->createElement('radio', 'urlparam', '', 'course', 2, array());
+        $radioarray[] = $mform->createElement('radio', 'urlparam', '', 'courseid', 3, array());
+        $mform->addGroup($radioarray, 'radioar', get_string('urlparam', 'local_vxg_menus'), array('<br>'), false);
+        $mform->addHelpButton('radioar', 'urlparam', 'local_vxg_menus');
+        $mform->setDefault('urlparam', 0);
 
         $icongroup = array();
         $icongroup[] =& $mform->createElement('html',

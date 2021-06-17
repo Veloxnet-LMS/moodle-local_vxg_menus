@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Page for adding new navigation item
+ *
+ * @package    local_vxg_menus
+ * @copyright  Veloxnet
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
@@ -46,7 +54,7 @@ if ($menuid != 0) {
 }
 
 if (isset($menu) && !empty($menu->icon)) {
-    $iconarr = explode('/', $menu->icon, 2);
+    $iconarr  = explode('/', $menu->icon, 2);
     $iconname = $iconarr[1];
     $iconcomp = $iconarr[0];
 } else {
@@ -68,10 +76,19 @@ if ($mform->is_cancelled()) {
 
     if ($menuid == 0) {
 
-        $node             = new stdClass();
-        $node->name       = $data->name;
-        $node->lang       = $data->lang;
-        $node->url        = $data->url;
+        $node       = new stdClass();
+        $node->name = $data->name;
+        $node->lang = $data->lang;
+        $node->url  = $data->url;
+        if ($data->urlparam == 1) {
+            $node->params = 'id';
+        } else if ($data->urlparam == 2) {
+            $node->params = 'course';
+        } else if ($data->urlparam == 3) {
+            $node->params = 'courseid';
+        } else {
+            $node->params = null;
+        }
         $node->disabled   = $data->disabled;
         $node->icon       = $data->icon;
         $node->menu_order = $data->menu_order;
@@ -95,11 +112,20 @@ if ($mform->is_cancelled()) {
 
     } else {
 
-        $node             = new stdClass();
-        $node->id         = $menuid;
-        $node->name       = $data->name;
-        $node->lang       = $data->lang;
-        $node->url        = $data->url;
+        $node       = new stdClass();
+        $node->id   = $menuid;
+        $node->name = $data->name;
+        $node->lang = $data->lang;
+        $node->url  = $data->url;
+        if ($data->urlparam == 1) {
+            $node->params = 'id';
+        } else if ($data->urlparam == 2) {
+            $node->params = 'course';
+        } else if ($data->urlparam == 3) {
+            $node->params = 'courseid';
+        } else {
+            $node->params = null;
+        }
         $node->disabled   = $data->disabled;
         $node->icon       = $data->icon;
         $node->menu_order = $data->menu_order;
@@ -128,6 +154,13 @@ if ($mform->is_cancelled()) {
 
 echo $OUTPUT->header();
 if ($menuid != 0) {
+    if ($menu->params == 'id') {
+        $menu->urlparam = 1;
+    } else if ($menu->params == 'course') {
+        $menu->urlparam = 2;
+    } else if ($menu->params == 'courseid') {
+        $menu->urlparam = 3;
+    }
     $mform->set_data($menu);
 }
 $mform->display();
